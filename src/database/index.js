@@ -8,7 +8,7 @@ const pool = new Pool({
     port:5432
 })
 
-const nameDb = 'todolistDB'
+const nameDb = 'todolistdb'
 
 async function createDB(){
     try{
