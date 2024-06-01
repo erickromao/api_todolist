@@ -8,4 +8,6 @@ const userController = new UserController()
 routerUser.post("/", userController.create)
 routerUser.post("/login", userController.login)
 routerUser.delete("/", token, userController.delete)
+
+
 module.exports = routerUser
