@@ -46,7 +46,7 @@ class UserController {
             throw new AppError('Senha incorreta!')
         }
 
-        const token = jwt.sign({ id: user.id }, KEY, { expiresIn: "1m" })
+        const token = jwt.sign({ id: user.id }, KEY, { expiresIn: "3m" })
 
         return response.json({
             message: "Login Feito com sucesso!",
@@ -70,11 +70,10 @@ class UserController {
     async read(request, response) {
         const userId = request.user.id
 
-        const [user] = await knex('users').select('name', 'email').where({ id: userId })
+        const [user] = await knex('users').select('name', 'email', 'created_at', 'updated_at').where({ id: userId })
         return response.json({
             message: "Dados do usuário:",
-            name: user.name,
-            email: user.email
+            user: user
         })
     }
     async update(request, response) {
@@ -113,7 +112,8 @@ class UserController {
             .update({
                 name: user.name,
                 email: user.email,
-                password: user.password
+                password: user.password,
+                updated_at: knex.raw('now()')
             })
             .where({ id: userId })
 

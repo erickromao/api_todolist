@@ -4,7 +4,7 @@ const AppError = require("../utils/AppError")
 class NotesController{
     async create(request, response){
         const userId = request.user.id
-        const {title, note} = request.body
+        const {title, note, checked} = request.body
 
         if(!title || !note){
             throw new AppError('Preencha os campos de "title" e "note".')
@@ -20,19 +20,22 @@ class NotesController{
         await knex("notes").insert({
             title,
             note,
-            id_user:userId
+            id_user:userId,
+            checked
+
         })
         response.json({
             message:`Nota criada com sucesso ${user.name}`,
             title,
-            note
+            note,
+            checked
         })
         
     }
 
     async update(request, response){
         const userId = request.user.id
-        const {title, new_title,  note} = request.body
+        const {title, new_title,  note, checked} = request.body
 
         if(!title){
             throw new AppError('O título é obrigatório!')
@@ -55,21 +58,34 @@ class NotesController{
                 throw new AppError('Esse título já está em uso.')
             }
         }
-
+        
         checkNote.title = new_title ?? checkNote.title
         checkNote.note = note ?? checkNote.note
+        checkNote.checked = checked ?? checkNote.checked
+        
+        const time = new Date()
+        const currentTime = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+        const currentDate = `${time.getDay()}:${time.getMonth()}:${time.getFullYear()}`
 
         await knex('notes')
         .update({
             title:checkNote.title,
-            note: checkNote.note
+            note: checkNote.note,
+            checked: checkNote.checked,
+            updated_at: knex.raw('now()')
         })
         .where({id:checkNote.id})
         
         return response.json({
             message:'Nota atualizada com sucesso!',
             Old_Note:oldNote,
-            New_Note:[checkNote.title, checkNote.note]
+            New_Note:[checkNote.title, checkNote.note],
+            checked: checkNote.checked,
+            updated_at:{
+                time: currentTime,
+                date: currentDate
+            }
+            
         })
     }
 
@@ -82,7 +98,10 @@ class NotesController{
         }
 
         const [user] = await knex("users").where({id:userId})
-        const [checkNoteTitle] = await knex("notes").select('title','note').where({title}).where({id_user:userId})
+        const [checkNoteTitle] = await knex("notes")
+        .select('title','note', 'checked', 'created_at', 'updated_at')
+        .where({title})
+        .where({id_user:userId})
         if(!checkNoteTitle){
             throw new AppError('Nota não encontrada.')
         }
@@ -99,7 +118,7 @@ class NotesController{
         const [user] = await knex("users").where({id:userId})
 
         const notes = await knex("notes")
-        .select('title','note')
+        .select('title','note','checked','updated_at', 'created_at')
         .where({id_user:userId})
         .orderBy('title')
        
