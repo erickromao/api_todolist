@@ -24,8 +24,7 @@ class UserController {
         return response.status(201).json({
             message: "Conta criada com sucesso!",
             name,
-            email,
-            password
+            email
         })
     }
     async login(request, response) {
