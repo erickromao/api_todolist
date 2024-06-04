@@ -18,6 +18,8 @@ Este projeto é uma API para gerenciar uma lista de tarefas (To-Do List), permit
 * **Deletar Usuário**: Remove um usuário existente da aplicação.
 * **Atualizar Usuário**: Permite que um usuário autenticado atualize suas informações de cadastro.
 
+**Nota:** A criação de novos usuários (registro) pode ser feita sem autenticação. Todas as outras operações,leitura, atualização e exclusão de informações de cadastro de usuário, bem como todas as operações de tarefas, exigem autenticação gerada quando o usuário realiza o login, via JWT (JSON Web Token).
+
 ## Tecnologias Utilizadas
 
 * **JavaScript**: Linguagem de programação utilizada para desenvolver a aplicação.
