@@ -30,7 +30,7 @@ Este projeto é uma API para gerenciar uma lista de tarefas (To-Do List), permit
 
 ## Estrutura do Banco de Dados
 
-![image](https://github.com/erickromao/api_todolist/assets/123843702/45da33be-576b-4314-8feb-d6ebb2466058)
+![image](https://github.com/erickromao/api_todolist/assets/123843702/12c9aeae-e78f-4881-8fff-4744c6ee7e8d)
 
 
 * A tabela "notes" foi criada utilizando Knex.js.
